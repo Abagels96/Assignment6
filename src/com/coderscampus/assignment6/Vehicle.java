@@ -5,7 +5,12 @@ Integer sales;
 Integer date;
 public Integer getSales() {
 	return sales;
+}public Vehicle(Integer sales, Integer date) {
+	super();
+	this.sales = sales;
+	this.date = date;
 }
+
 public void setSales(Integer sales) {
 	this.sales = sales;
 }
