@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class VehicleService {
@@ -27,8 +28,14 @@ public class VehicleService {
 	ArrayList<Object> manyCars= new ArrayList();
 	String [] another= new String[4];
 	enum Months{};
-	Month.valueOf(Months, another[0]);
-	public void readFile() throws IOException {
+	String[] months= {"January", "February,",
+			"March","April","May","June","July","August","September","October","November","December"};
+	
+	public void findMonth(String abbreviation) {
+	Optional<Month> theTruth=	Arrays.stream(Month.values()).filter(month->month.name().substring(0,3).equalsIgnoreCase(abbreviation)).findFirst();
+	System.out.println(theTruth);
+	}
+public void readFile() throws IOException {
 	try {
 		BufferedReader reader= new BufferedReader(new FileReader("src/modelS.csv"));
 		
@@ -38,7 +45,7 @@ public class VehicleService {
 			System.out.println(lines);
 			
 			another=lines.split("-");
-			
+			findMonth(another[0]);
 //			Vehicle vehicle= new Vehicle(date, sales);
 			
 			System.out.println(Arrays.toString(another));
