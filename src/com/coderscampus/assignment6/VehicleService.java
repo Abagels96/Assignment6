@@ -12,15 +12,22 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class VehicleService {
-//YearMonth yearMonth=  new YearMonth();
+	Integer i=0;
 	ArrayList<Object> manyCars= new ArrayList();
-	Integer[] pieces= new Integer[32];
+	String [] another= new String[4];
+	enum Months{};
+	Month.valueOf(Months, another[0]);
 	public void readFile() throws IOException {
 	try {
 		BufferedReader reader= new BufferedReader(new FileReader("src/modelS.csv"));
@@ -29,12 +36,24 @@ public class VehicleService {
 		reader.readLine();
 		while((lines=reader.readLine())!=null) {
 			System.out.println(lines);
-//			Integer number=Integer.parseInt(lines);
-//			pieces= number;
-			manyCars.add(lines);
 			
+			another=lines.split("-");
+			
+//			Vehicle vehicle= new Vehicle(date, sales);
+			
+			System.out.println(Arrays.toString(another));
+//			Integer sales= Integer.parseInt(another[2]);
+//			Integer date= Integer.parseInt(another[1]);
+//     YearMonth date=  new YearMonth(pieces[0]);
+//
+			
+			
+//			manyCars.add(vehicle);
+			
+//		}
+//		for(Object cars:manyCars) {
+//			System.out.println(cars);
 		}
-		
 //	List<Object> dates=	manyCars.stream().filter(a-> a.date().equals(17)).collect(Collectors.toList());
 //		for(Object cars:manyCars) {
 //			System.out.println(cars);
