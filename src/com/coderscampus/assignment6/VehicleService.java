@@ -12,8 +12,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -22,18 +20,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class VehicleService {
 	Integer i=0;
 	ArrayList<Object> manyCars= new ArrayList();
 	String [] another= new String[4];
-	enum Months{};
+
+	Vehicle vehicle= new Vehicle();
 	String[] months= {"January", "February,",
 			"March","April","May","June","July","August","September","October","November","December"};
 	
-	public void findMonth(String abbreviation) {
-	Optional<Month> theTruth=	Arrays.stream(Month.values()).filter(month->month.name().substring(0,3).equalsIgnoreCase(abbreviation)).findFirst();
+	public  int  findMonth(String abbreviation) {
+	Optional<Month> theTruth=	Arrays.stream(Month.values())
+			                          .filter(month->month.name()
+					                  .substring(0,3)
+					                  .equalsIgnoreCase(abbreviation))
+			                          .findFirst();
 	System.out.println(theTruth);
+	System.out.println();
+//System.out.println( theTruth.orElseThrow(IllegalArgumentException::new).getValue());
+	return theTruth.orElseThrow(IllegalArgumentException::new).getValue();
 	}
 public void readFile() throws IOException {
 	try {
@@ -45,26 +52,31 @@ public void readFile() throws IOException {
 			System.out.println(lines);
 			
 			another=lines.split("-");
-			findMonth(another[0]);
-//			Vehicle vehicle= new Vehicle(date, sales);
-			
-			System.out.println(Arrays.toString(another));
-//			Integer sales= Integer.parseInt(another[2]);
-//			Integer date= Integer.parseInt(another[1]);
-//     YearMonth date=  new YearMonth(pieces[0]);
+			Integer month= findMonth(another[0]); 
+		String flarf= Arrays.toString(another);
+		System.out.println(flarf);
+another=flarf.split(",");
+System.out.println(Arrays.toString(another));
+Integer year=Integer.parseInt(another[1].strip());
+System.out.println(year);
+			Integer sales= Integer.parseInt(another[2].replaceAll("[(){}<>\\[\\]]",""));
+			System.out.println(sales);
+				
+						Vehicle vehicle= new Vehicle(month, year, sales);
 //
 			
 			
-//			manyCars.add(vehicle);
+			manyCars.add(vehicle);
 			
-//		}
-//		for(Object cars:manyCars) {
-//			System.out.println(cars);
 		}
-//	List<Object> dates=	manyCars.stream().filter(a-> a.date().equals(17)).collect(Collectors.toList());
-//		for(Object cars:manyCars) {
-//			System.out.println(cars);
-//		}
+		for(Object cars:manyCars) {
+		System.out.println(cars);
+		}
+	Optional <Object> year2017=	manyCars.stream()
+			                        .filter(a-> vehicle.getYear()
+			                        .equals(17)).findFirst();
+	System.out.println(year2017);
+
 	} catch (FileNotFoundException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
