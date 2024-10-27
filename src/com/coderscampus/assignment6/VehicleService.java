@@ -27,7 +27,7 @@ public class VehicleService {
 	ArrayList<Object> manyCars= new ArrayList();
 	String [] another= new String[4];
 
-	Vehicle vehicle= new Vehicle();
+//	Vehicle vehicle= new Vehicle();
 	String[] months= {"January", "February,",
 			"March","April","May","June","July","August","September","October","November","December"};
 	
@@ -52,29 +52,30 @@ public void readFile() throws IOException {
 			System.out.println(lines);
 			
 			another=lines.split("-");
-			Integer month= findMonth(another[0]); 
 		String flarf= Arrays.toString(another);
 		System.out.println(flarf);
 another=flarf.split(",");
 System.out.println(Arrays.toString(another));
-Integer year=Integer.parseInt(another[1].strip());
-System.out.println(year);
-			Integer sales= Integer.parseInt(another[2].replaceAll("[(){}<>\\[\\]]",""));
-			System.out.println(sales);
 				
-						Vehicle vehicle= new Vehicle(month, year, sales);
 //
 			
 			
-			manyCars.add(vehicle);
 			
 		}
+		Integer month= findMonth(another[0]); 
+		Integer year=Integer.parseInt(another[1].strip());
+		System.out.println(year);
+		Integer sales= Integer.parseInt(another[2].replaceAll("[(){}<>\\[\\]]",""));
+		System.out.println(sales);
+		Vehicle vehicle= new Vehicle(month, year, sales);
+		manyCars.add(vehicle);
 		for(Object cars:manyCars) {
 		System.out.println(cars);
 		}
 	Optional <Object> year2017=	manyCars.stream()
-			                        .filter(a-> vehicle.getYear()
-			                        .equals(17)).findFirst();
+			                        .filter(a-> vehicle.month
+			                        .equals(5))
+			                        .findFirst();
 	System.out.println(year2017);
 
 	} catch (FileNotFoundException e) {
