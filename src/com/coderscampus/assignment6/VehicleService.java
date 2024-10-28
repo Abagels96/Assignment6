@@ -13,8 +13,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.Month;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,90 +27,117 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class VehicleService {
-	Integer i=0;
-	ArrayList<Vehicle> manyCars= new ArrayList();
-	String [] another= new String[4];
+	Integer i = 0;
+	ArrayList<Vehicle> manyCars = new ArrayList();
+	String[] another = new String[4];
 
 //	Vehicle vehicle= new Vehicle();
-	String[] months= {"January", "February,",
-			"March","April","May","June","July","August","September","October","November","December"};
-	
-	public  int  findMonth(String abbreviation) {
-	Optional<Month> theTruth= Arrays.stream(Month.values())
-		      .filter(months -> months.name().substring(0, 3).equalsIgnoreCase(abbreviation))
-		      .findFirst();
-	System.out.println(theTruth);
-//System.out.println( theTruth.orElseThrow(IllegalArgumentException::new).getValue());
-	return theTruth.orElseThrow(IllegalArgumentException::new).getValue();}
-public void readFile() throws IOException {
-	
-	BufferedReader reader=null;
-	try {
-	reader= new BufferedReader(new FileReader("src/modelS.csv"));
-		
-		String lines="";
-		reader.readLine();
-		while((lines=reader.readLine())!=null) {
-			System.out.println(lines);
-			
-			another=lines.split("-");
-		String flarf= Arrays.toString(another);
-		System.out.println(flarf);
-another=flarf.split(",");
-System.out.println(Arrays.toString(another));
-System.out.println( another[0].getClass().getName());
-Integer month= findMonth(another[0].replaceAll("[(){}<>\\[\\]]",""));		
-//System.out.println(month);
-			
-Integer year=Integer.parseInt(another[1].strip());
-System.out.println(year);
-Integer sales= Integer.parseInt(another[2].replaceAll("[(){}<>\\[\\]]",""));
-System.out.println(sales);
-System.out.println(another[0].replaceAll("[(){}<>\\[\\]]", ""));
-			
-Vehicle vehicle= new Vehicle(month, year, sales);
-System.out.println(vehicle.getSales().getClass().toString());
-			
-manyCars.add(vehicle);		}
-	
-	for(Object cars:manyCars) {
-		System.out.println(cars);
-		}
-	System.out.println(manyCars.getClass().getName());
-	List<Vehicle> year2016=	manyCars.stream()
-			.filter(vehicle->vehicle.getYear()
-					.equals(16)).collect(Collectors.toList());	
-	System.out.println(year2016);
-Integer total=	year2016.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x->x));
-System.out.println(total);
-	
-	List<Vehicle> year2017=	manyCars.stream()
-			 .filter(vehicle->vehicle.getYear()
-			                        .equals(17)).collect(Collectors.toList());	
-	
-	
-	System.out.println(year2017);
-	Integer total2=	year2017.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x->x));
-	System.out.println(total2);
-	List<Vehicle> year2018=	manyCars.stream()
-			.filter(vehicle->vehicle.getYear()
-					.equals(18)).collect(Collectors.toList());	
-	System.out.println(year2018);
-	Integer total3=	year2018.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x->x));
-	System.out.println(total3);
-	List<Vehicle> year2019=	manyCars.stream()
-			.filter(vehicle->vehicle.getYear()
-					.equals(19)).collect(Collectors.toList());	
-	System.out.println(year2019);
-	Integer total4=	year2019.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x->x));
-	System.out.println(total4);
+	String[] months = { "January", "February,", "March", "April", "May", "June", "July", "August", "September",
+			"October", "November", "December" };
 
-	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}finally {
-		reader.close();
+	public int findMonth(String abbreviation) {
+		Optional<Month> theTruth = Arrays.stream(Month.values())
+				.filter(months -> months.name().substring(0, 3).equalsIgnoreCase(abbreviation)).findFirst();
+		System.out.println(theTruth);
+//System.out.println( theTruth.orElseThrow(IllegalArgumentException::new).getValue());
+		return theTruth.orElseThrow(IllegalArgumentException::new).getValue();
 	}
-	
+
+	public void readFile(String filename) throws IOException {
+
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader(filename));
+
+			String lines = "";
+			reader.readLine();
+			while ((lines = reader.readLine()) != null) {
+				System.out.println(lines);
+
+				another = lines.split("-");
+				String flarf = Arrays.toString(another);
+				System.out.println(flarf);
+				another = flarf.split(",");
+				System.out.println(Arrays.toString(another));
+				System.out.println(another[0].getClass().getName());
+				Integer month = findMonth(another[0].replaceAll("[(){}<>\\[\\]]", ""));
+//System.out.println(month);
+
+				Integer year = Integer.parseInt(another[1].strip());
+				System.out.println(year);
+				Integer sales = Integer.parseInt(another[2].replaceAll("[(){}<>\\[\\]]", ""));
+				System.out.println(sales);
+				System.out.println(another[0].replaceAll("[(){}<>\\[\\]]", ""));
+
+				Vehicle vehicle = new Vehicle(month, year, sales);
+				System.out.println(vehicle.getSales().getClass().toString());
+
+				manyCars.add(vehicle);
+			}
+			Collections.sort(manyCars, Comparator.comparingInt(Vehicle::getSales));
+
+			for (Object cars : manyCars) {
+				System.out.println(cars);
+			}
+
+//	manyCars.c
+			System.out.println(manyCars.getClass().getName());
+			List<Vehicle> year2016 = manyCars.stream().filter(vehicle -> vehicle.getYear().equals(16))
+					.collect(Collectors.toList());
+//	System.out.println(year2016);
+			Integer total = year2016.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x -> x));
+			System.out.println(total);
+
+			List<Vehicle> year2017 = manyCars.stream().filter(vehicle -> vehicle.getYear().equals(17))
+					.collect(Collectors.toList());
+
+//	System.out.println(year2017);
+			Integer total2 = year2017.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x -> x));
+			System.out.println(total2);
+			List<Vehicle> year2018 = manyCars.stream().filter(vehicle -> vehicle.getYear().equals(18))
+					.collect(Collectors.toList());
+//	System.out.println(year2018);
+			Integer total3 = year2018.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x -> x));
+			System.out.println(total3);
+			List<Vehicle> year2019 = manyCars.stream().filter(vehicle -> vehicle.getYear().equals(19))
+					.collect(Collectors.toList());
+//	System.out.println(year2019);
+			Integer total4 = year2019.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x -> x));
+			System.out.println(total4);
+
+			Vehicle loser = manyCars.get(0);
+			System.out.println(loser);
+			Integer loserMonth = loser.getMonth();
+			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("20yy-MM");
+			Integer loserYear = loser.getYear();
+			System.out.println(loserMonth);
+			System.out.println(loserYear);
+			Vehicle winner = manyCars.get(manyCars.size() - 1);
+			System.out.println(winner);
+			Integer winnerMonth = winner.getMonth();
+			Integer winnerYear = winner.getYear();
+			System.out.println(winnerMonth);
+			System.out.println(winnerYear);
+
+			String variable = "S";
+
+			System.out.println("MODEL " + variable + " YEARLY SALES REPORT ");
+			System.out.println("---------------");
+			System.out.println("2016->" + total);
+			System.out.println("2017->" + total2);
+			System.out.println("2018->" + total3);
+			System.out.println("2019->" + total4);
+			String bestYearMonth = YearMonth.of(winnerYear, winnerMonth).format(pattern);
+			String worstYearMonth = YearMonth.of(loserYear, loserMonth).format(pattern);
+			System.out.println("The best month for the Model" + variable + " was: " + bestYearMonth);
+			System.out.println("The worst month for the Model" + variable + " was: " + worstYearMonth);
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			reader.close();
+		}
+
 	}
 }
