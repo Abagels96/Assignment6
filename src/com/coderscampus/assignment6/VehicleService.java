@@ -43,11 +43,11 @@ public class VehicleService {
 		return theTruth.orElseThrow(IllegalArgumentException::new).getValue();
 	}
 
-	public void readFile(String filename) throws IOException {
+	public void readFile(String fileName) throws IOException {
 
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new FileReader(filename));
+			reader = new BufferedReader(new FileReader(fileName));
 
 			String lines = "";
 			reader.readLine();
@@ -105,32 +105,7 @@ public class VehicleService {
 			Integer total4 = year2019.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x -> x));
 			System.out.println(total4);
 
-			Vehicle loser = manyCars.get(0);
-			System.out.println(loser);
-			Integer loserMonth = loser.getMonth();
-			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("20yy-MM");
-			Integer loserYear = loser.getYear();
-			System.out.println(loserMonth);
-			System.out.println(loserYear);
-			Vehicle winner = manyCars.get(manyCars.size() - 1);
-			System.out.println(winner);
-			Integer winnerMonth = winner.getMonth();
-			Integer winnerYear = winner.getYear();
-			System.out.println(winnerMonth);
-			System.out.println(winnerYear);
-
-			String variable = "S";
-
-			System.out.println("MODEL " + variable + " YEARLY SALES REPORT ");
-			System.out.println("---------------");
-			System.out.println("2016->" + total);
-			System.out.println("2017->" + total2);
-			System.out.println("2018->" + total3);
-			System.out.println("2019->" + total4);
-			String bestYearMonth = YearMonth.of(winnerYear, winnerMonth).format(pattern);
-			String worstYearMonth = YearMonth.of(loserYear, loserMonth).format(pattern);
-			System.out.println("The best month for the Model" + variable + " was: " + bestYearMonth);
-			System.out.println("The worst month for the Model" + variable + " was: " + worstYearMonth);
+			generateReport(fileName, total, total2, total3, total4);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -139,5 +114,39 @@ public class VehicleService {
 			reader.close();
 		}
 
+	}
+
+	public void generateReport(String fileName, Integer total, Integer total2, Integer total3, Integer total4) {
+		Vehicle loser = manyCars.get(0);
+		System.out.println(loser);
+		Integer loserMonth = loser.getMonth();
+		DateTimeFormatter pattern = DateTimeFormatter.ofPattern("20yy-MM");
+		Integer loserYear = loser.getYear();
+		System.out.println(loserMonth);
+		System.out.println(loserYear);
+		Vehicle winner = manyCars.get(manyCars.size() - 1);
+		System.out.println(winner);
+		Integer winnerMonth = winner.getMonth();
+		Integer winnerYear = winner.getYear();
+String variable="";
+		if(fileName.contains("S")) {
+		
+		variable = "S";
+		}
+		else if(fileName.contains("X")) {
+			variable="X";
+		}
+		else variable="3";
+		
+		System.out.println("MODEL " + variable + " YEARLY SALES REPORT ");
+		System.out.println("---------------");
+		System.out.println("2016->" + total);
+		System.out.println("2017->" + total2);
+		System.out.println("2018->" + total3);
+		System.out.println("2019->" + total4);
+		String bestYearMonth = YearMonth.of(winnerYear, winnerMonth).format(pattern);
+		String worstYearMonth = YearMonth.of(loserYear, loserMonth).format(pattern);
+		System.out.println("The best month for the Model" + variable + " was: " + bestYearMonth);
+		System.out.println("The worst month for the Model" + variable + " was: " + worstYearMonth);
 	}
 }
