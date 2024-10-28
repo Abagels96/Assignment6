@@ -25,13 +25,8 @@ public Integer getSales() {
 	this.year=year;
 	this.sales = sales;
 }
- public Vehicle() {
-	 
- }
-@Override
-public String toString() {
-	return "Vehicle [sales=" + sales + ", year=" + year + ", month=" + month + "]";
-}
+ 
+
 public Integer getMonth() {
 	return month;
 }
@@ -40,6 +35,10 @@ public void setMonth(Integer month) {
 }
 public void setSales(Integer sales) {
 	this.sales = sales;
+}
+@Override
+public String toString() {
+	return "Vehicle [sales=" + sales + ", year=" + year + " ,month=" + month+"]";
 }
 
 
