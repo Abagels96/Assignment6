@@ -210,6 +210,9 @@ for  (String name:fileNames) {
 		if(name.contains(letters[i])) {
 			variable=letters[i];
 		}
+		else {
+			variable="unknown";
+		}
 	}
 }
 	
