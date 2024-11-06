@@ -1,3 +1,4 @@
+
 package com.coderscampus.assignment6;
 
 //need to read file
@@ -17,10 +18,12 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,8 +31,12 @@ import java.util.stream.Stream;
 
 public class VehicleService {
 	Integer i = 0;
-	ArrayList<Vehicle> manyCars = new ArrayList();
-	String[] another = new String[4];
+	ArrayList<Vehicle> firstArray = new ArrayList<Vehicle>();
+	ArrayList<Vehicle> secondArray = new ArrayList<Vehicle>();
+	ArrayList<Vehicle> thirdArray = new ArrayList<Vehicle>();
+	String[] mainArray = new String[4];
+	String[] mainArray1 = new String[4];
+	String[] mainArray2 = new String[4];
 
 //	Vehicle vehicle= new Vehicle();
 	String[] months = { "January", "February,", "March", "April", "May", "June", "July", "August", "September",
@@ -38,101 +45,226 @@ public class VehicleService {
 	public int findMonth(String abbreviation) {
 		Optional<Month> theTruth = Arrays.stream(Month.values())
 				.filter(months -> months.name().substring(0, 3).equalsIgnoreCase(abbreviation)).findFirst();
-//		System.out.println(theTruth);
-//System.out.println( theTruth.orElseThrow(IllegalArgumentException::new).getValue());
 		return theTruth.orElseThrow(IllegalArgumentException::new).getValue();
 	}
 
-	public void readFile(String fileName) throws IOException {
+	public void compileArray(String fileName,String fileName2,String fileName3) throws IOException {
 
 		BufferedReader reader = null;
+		BufferedReader reader2 = null;
+		BufferedReader reader3 = null;
 		try {
 			reader = new BufferedReader(new FileReader(fileName));
+			reader2 = new BufferedReader(new FileReader(fileName2));
+			reader3 = new BufferedReader(new FileReader(fileName3));
 
 			String lines = "";
 			reader.readLine();
 			while ((lines = reader.readLine()) != null) {
-//				System.out.println(lines);
 
-				another = lines.split("-");
-				String flarf = Arrays.toString(another);
-//				System.out.println(flarf);
-				another = flarf.split(",");
-//				System.out.println(Arrays.toString(another));
-				Integer month = findMonth(another[0].replaceAll("[(){}<>\\[\\]]", ""));
-//System.out.println(month);
+				mainArray = lines.split("-");
+				String secondaryArray = Arrays.toString(mainArray);
+				mainArray = secondaryArray.split(",");
 
-				Integer year = Integer.parseInt(another[1].strip());
-//				System.out.println(year);
-				Integer sales = Integer.parseInt(another[2].replaceAll("[(){}<>\\[\\]]", ""));
-//				System.out.println(sales);
+				YearMonth yearMonth =YearMonth.of(Integer.parseInt(mainArray[1].strip()),findMonth(mainArray[0].replaceAll("[(){}<>\\[\\]]", "")));
+				Integer sales = Integer.parseInt(mainArray[2].replaceAll("[(){}<>\\[\\]]", ""));
 
-				Vehicle vehicle = new Vehicle(month, year, sales);
+				Vehicle vehicle = new Vehicle( yearMonth, sales);
 
-				manyCars.add(vehicle);
+				firstArray.add(vehicle);
+				
 			}
-			Collections.sort(manyCars, Comparator.comparingInt(Vehicle::getSales));
+			
+			String lines1 = "";
+			reader2.readLine();
+			while ((lines1 = reader2.readLine()) != null) {
+//				.out.println(lines1);
+				mainArray1 = lines1.split("-");
+				String secondaryArray = Arrays.toString(mainArray1);
+				mainArray1 = secondaryArray.split(",");
+				
+				YearMonth yearMonth =YearMonth.of(Integer.parseInt(mainArray1[1].strip()),findMonth(mainArray1[0].replaceAll("[(){}<>\\[\\]]", "")));
+				Integer sales = Integer.parseInt(mainArray1[2].replaceAll("[(){}<>\\[\\]]", ""));
+				
+				Vehicle vehicle1 = new Vehicle( yearMonth, sales);
+				
+				secondArray.add(vehicle1);
+			}
+				
+				String lines2 = "";
+				reader3.readLine();
+				while ((lines2 = reader3.readLine()) != null) {
+					mainArray2 = lines2.split("-");
+					String secondaryArray = Arrays.toString(mainArray2);
+					mainArray2 = secondaryArray.split(",");
+					
+					YearMonth yearMonth =YearMonth.of(Integer.parseInt(mainArray2[1].strip()),findMonth(mainArray2[0].replaceAll("[(){}<>\\[\\]]", "")));
+					Integer sales = Integer.parseInt(mainArray2[2].replaceAll("[(){}<>\\[\\]]", ""));
+					
+					Vehicle vehicle2 = new Vehicle( yearMonth, sales);
+				thirdArray.add(vehicle2);
+				
+				}
+			
+	
+			Collections.sort(firstArray, Comparator.comparingInt(Vehicle::getSales));
+			for(Vehicle vehicles:firstArray) {
+			}
+			Collections.sort(secondArray, Comparator.comparingInt(Vehicle::getSales));
+			for(Vehicle vehicles1:secondArray) {
+			}
+			Collections.sort(thirdArray, Comparator.comparingInt(Vehicle::getSales));
+			for(Vehicle vehicles2:thirdArray) {
+			}
 
-//			for (Object cars : manyCars) {
-//				System.out.println(cars);
-//			}
 
-			List<Vehicle> year2016 = manyCars.stream().filter(vehicle -> vehicle.getYear().equals(16))
-					.collect(Collectors.toList());
-			Integer total = year2016.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x -> x));
+			streamSales(fileName,fileName2,fileName3);
 
-			List<Vehicle> year2017 = manyCars.stream().filter(vehicle -> vehicle.getYear().equals(17))
-					.collect(Collectors.toList());
 
-			Integer total2 = year2017.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x -> x));
-			List<Vehicle> year2018 = manyCars.stream().filter(vehicle -> vehicle.getYear().equals(18))
-					.collect(Collectors.toList());
-			Integer total3 = year2018.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x -> x));
-			List<Vehicle> year2019 = manyCars.stream().filter(vehicle -> vehicle.getYear().equals(19))
-					.collect(Collectors.toList());
-			Integer total4 = year2019.stream().map(Vehicle::getSales).collect(Collectors.summingInt(x -> x));
-
-			generateReport(fileName, total, total2, total3, total4);
-
-		} catch (FileNotFoundException e) {
+		 }catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			reader.close();
+			reader2.close();
+			reader3.close();
 		}
 
 	}
 
-	public void generateReport(String fileName, Integer total, Integer total2, Integer total3, Integer total4) {
-		Vehicle loser = manyCars.get(0);
-		Integer loserMonth = loser.getMonth();
-		DateTimeFormatter pattern = DateTimeFormatter.ofPattern("20yy-MM");
-		Integer loserYear = loser.getYear();
-//		System.out.println(loserMonth);
-//		System.out.println(loserYear);
-		Vehicle winner = manyCars.get(manyCars.size() - 1);
-//		System.out.println(winner);
-		Integer winnerMonth = winner.getMonth();
-		Integer winnerYear = winner.getYear();
-String variable="";
-		if(fileName.contains("S")) {
+	public void streamSales(String fileName,String fileName2,String fileName3) {
+		Map< YearMonth,Integer> year2016 = firstArray.stream()
+				                                     .filter(vehicle -> vehicle.getYearMonth().getYear()
+				                                     ==(0016))
+				                                     .collect(Collectors.toMap(vehicle-> vehicle.getYearMonth(),vehicle-> vehicle.getSales()));
 		
-		variable = "S";
+	Map< YearMonth,Integer> secondYear2016 = secondArray.stream()
+				                                       .filter(vehicle1 -> vehicle1.getYearMonth().getYear()==(16))
+				.collect(Collectors.toMap(vehicle1-> vehicle1.getYearMonth(),vehicle1-> vehicle1.getSales()));
+	Map< YearMonth,Integer> thirdYear2016 = thirdArray.stream()
+			.filter(vehicle2 -> vehicle2.getYearMonth().getYear()==(16))
+			.collect(Collectors.toMap(vehicle2-> vehicle2.getYearMonth(),vehicle2-> vehicle2.getSales()));
+		
+Integer total=year2016.values().stream().reduce(0,Integer::sum);
+Integer totalB=secondYear2016.values().stream().reduce(0,Integer::sum);
+Integer totalC=thirdYear2016.values().stream().reduce(0,Integer::sum);
+
+		Map<YearMonth, Integer> year2017 = firstArray.stream().filter(vehicle -> vehicle.getYearMonth().getYear()==(17))
+				.collect(Collectors.toMap(vehicle-> vehicle.getYearMonth(),vehicle-> vehicle.getSales()));
+		Map<YearMonth, Integer> secondYear2017 = secondArray.stream().filter(vehicle1 -> vehicle1.getYearMonth().getYear()==(17))
+				.collect(Collectors.toMap(vehicle1-> vehicle1.getYearMonth(),vehicle1-> vehicle1.getSales()));
+		Map<YearMonth, Integer> thirdYear2017 = thirdArray.stream().filter(vehicle2 -> vehicle2.getYearMonth().getYear()==(17))
+				.collect(Collectors.toMap(vehicle2-> vehicle2.getYearMonth(),vehicle2-> vehicle2.getSales()));
+		int total2 = year2017.values().stream().reduce(0,Integer::sum);
+		int total2B = secondYear2017.values().stream().reduce(0,Integer::sum);
+		int total2C = thirdYear2017.values().stream().reduce(0,Integer::sum);
+Map<YearMonth, Integer> year2018 = firstArray.stream().filter(vehicle -> vehicle.getYearMonth().getYear()==(18))
+				.collect(Collectors.toMap(vehicle-> vehicle.getYearMonth(),vehicle-> vehicle.getSales()));
+Map<YearMonth, Integer> secondYear2018 = secondArray.stream().filter(vehicle1 -> vehicle1.getYearMonth().getYear()==(18))
+.collect(Collectors.toMap(vehicle1-> vehicle1.getYearMonth(),vehicle1-> vehicle1.getSales()));
+Map<YearMonth, Integer> thirdYear2018 = firstArray.stream().filter(vehicle2 -> vehicle2.getYearMonth().getYear()==(18))
+.collect(Collectors.toMap(vehicle2-> vehicle2.getYearMonth(),vehicle2-> vehicle2.getSales()));
+Integer total3=year2018.values().stream().reduce(0,Integer::sum);
+Integer total3B=secondYear2018.values().stream().reduce(0,Integer::sum);
+Integer total3C=thirdYear2018.values().stream().reduce(0,Integer::sum);
+
+		Map<YearMonth, Integer> year2019 = firstArray.stream().filter(vehicle -> vehicle.getYearMonth().getYear()==(19))
+				.collect(Collectors.toMap(vehicle-> vehicle.getYearMonth(),vehicle-> vehicle.getSales()));
+		Map<YearMonth, Integer> secondYear2019 = secondArray.stream().filter(vehicle1 -> vehicle1.getYearMonth().getYear()==(19))
+				.collect(Collectors.toMap(vehicle1-> vehicle1.getYearMonth(),vehicle1-> vehicle1.getSales()));
+		Map<YearMonth, Integer> thirdYear2019 = thirdArray.stream().filter(vehicle2 -> vehicle2.getYearMonth().getYear()==(19))
+				.collect(Collectors.toMap(vehicle2-> vehicle2.getYearMonth(),vehicle2-> vehicle2.getSales()));
+		
+		Integer total4 = year2019.values().stream().reduce(0,Integer::sum);
+		Integer total4B = secondYear2019.values().stream().reduce(0,Integer::sum);
+		Integer total4C = thirdYear2019.values().stream().reduce(0,Integer::sum);
+		generateReport(fileName,fileName2,fileName3,total,total2,total3,total4,totalB,totalC,total2B,total2C,total3B,total3C,total4B,total4C);
+	}
+
+	public void generateReport(String fileName,String fileName2,String fileName3 ,Integer total, Integer total2,Integer total3,Integer total4,Integer totalB,Integer totalC,Integer total2B,Integer total2C,Integer total3B
+			,Integer total3C,Integer total4B,Integer total4C) {
+		
+		
+		Vehicle loser = firstArray.get(0);
+		Vehicle loser1 = secondArray.get(0);
+		Vehicle loser2 = thirdArray.get(0);
+		YearMonth loserTime= loser.getYearMonth();
+		YearMonth loserTimea= loser1.getYearMonth();
+		YearMonth loserTimeb= loser2.getYearMonth();
+		DateTimeFormatter pattern = DateTimeFormatter.ofPattern("20yy-MM");
+		Vehicle winner = firstArray.get(firstArray.size() - 1);
+		Vehicle winner1 = secondArray.get(firstArray.size() - 1);
+		Vehicle winner2 = thirdArray.get(firstArray.size() - 1);
+		YearMonth winnerTime=winner.getYearMonth();
+		YearMonth winnerTimea=winner1.getYearMonth();
+		YearMonth winnerTimeb=winner2.getYearMonth();
+		
+		String[] letters={"X","S","3"};
+		ArrayList<String> fileNames= new ArrayList<>();
+		fileNames.add(fileName);
+		fileNames.add(fileName2);
+		fileNames.add(fileName3);
+String variable = null;
+for  (String name:fileNames) {
+	for(int i=0; i<fileNames.size();i++) {
+		if(name.contains(letters[i])) {
+			variable=letters[i];
 		}
-		else if(fileName.contains("X")) {
-			variable="X";
-		}
-		else variable="3";
+	}
+}
+	
+
 		
 		System.out.println("MODEL " + variable + " YEARLY SALES REPORT ");
 		System.out.println("---------------");
-		System.out.println("2016->" + total);
+		if(total==0) {
+			System.out.println("");
+		
+		}else {
+			
+			System.out.println("2016->" + total);
+		}
 		System.out.println("2017->" + total2);
 		System.out.println("2018->" + total3);
 		System.out.println("2019->" + total4);
-		String bestYearMonth = YearMonth.of(winnerYear, winnerMonth).format(pattern);
-		String worstYearMonth = YearMonth.of(loserYear, loserMonth).format(pattern);
-		System.out.println("The best month for the Model" + variable + " was: " + bestYearMonth);
-		System.out.println("The worst month for the Model" + variable + " was: " + worstYearMonth);
+		String bestYearMonth =winnerTime.format(pattern);
+		String worstYearMonth =loserTime.format(pattern);
+		System.out.println("The best month for the Model " + variable + " was: " + bestYearMonth);
+		System.out.println("The worst month for the Model " + variable + " was: " + worstYearMonth);
+		
+		System.out.println("MODEL " + variable + " YEARLY SALES REPORT ");
+		System.out.println("---------------");
+		if(totalB==0) {
+			System.out.println("");
+		
+		}else {
+			
+			System.out.println("2016->" + totalB);
+		}
+		System.out.println("2017->" + total2B);
+		System.out.println("2018->" + total3B);
+		System.out.println("2019->" + total4B);
+		String bestYearMontha =winnerTimea.format(pattern);
+		String worstYearMontha =loserTimea.format(pattern);
+		System.out.println("The best month for the Model" +  variable + " was: " + bestYearMontha);
+		System.out.println("The worst month for the Model " + variable + " was: " + worstYearMontha);
+		
+		
+		System.out.println("MODEL " + variable + " YEARLY SALES REPORT ");
+		System.out.println("---------------");
+		if(totalC==0) {
+			System.out.println("");
+		
+		}else {
+			
+			System.out.println("2016->" + totalC);
+		}
+		System.out.println("2017->" + total2C);
+		System.out.println("2018->" + total3C);
+		System.out.println("2019->" + total4C);
+		String bestYearMonthb =winnerTimeb.format(pattern);
+		String worstYearMonthb =loserTimeb.format(pattern);
+		System.out.println("The best month for the Model " + variable + " was: " + bestYearMonthb);
+		System.out.println("The worst month for the Model " + variable + " was: " + worstYearMonthb);
 	}
 }
