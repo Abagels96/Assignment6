@@ -25,7 +25,9 @@ public Integer getSales() {
 	this.yearMonth=year;
 	this.sales = sales;
 }
- 
+ public Vehicle() {
+	 
+ }
 
 
 public void setSales(Integer sales) {

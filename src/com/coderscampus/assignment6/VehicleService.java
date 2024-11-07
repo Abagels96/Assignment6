@@ -34,7 +34,7 @@ public class VehicleService {
 	ArrayList<Vehicle> firstArray = new ArrayList<Vehicle>();
 	ArrayList<Vehicle> secondArray = new ArrayList<Vehicle>();
 	ArrayList<Vehicle> thirdArray = new ArrayList<Vehicle>();
-	String[] mainArray = new String[4];
+	String[] mainArray0 = new String[4];
 	String[] mainArray1 = new String[4];
 	String[] mainArray2 = new String[4];
 
@@ -50,6 +50,7 @@ public class VehicleService {
 
 	public void compileArray(String fileName, String fileName2, String fileName3) throws IOException {
 
+		Vehicle vehicle = new Vehicle();
 		BufferedReader reader = null;
 		BufferedReader reader2 = null;
 		BufferedReader reader3 = null;
@@ -62,17 +63,17 @@ public class VehicleService {
 			reader.readLine();
 			while ((lines = reader.readLine()) != null) {
 
-				mainArray = lines.split("-");
-				String secondaryArray = Arrays.toString(mainArray);
-				mainArray = secondaryArray.split(",");
+				mainArray0 = lines.split("-");
+				String secondaryArray = Arrays.toString(mainArray0);
+				mainArray0 = secondaryArray.split(",");
 
-				YearMonth yearMonth = YearMonth.of(Integer.parseInt(mainArray[1].strip()),
-						findMonth(mainArray[0].replaceAll("[(){}<>\\[\\]]", "")));
-				Integer sales = Integer.parseInt(mainArray[2].replaceAll("[(){}<>\\[\\]]", ""));
+				YearMonth yearMonth = YearMonth.of(Integer.parseInt(mainArray0[1].strip()),
+						findMonth(mainArray0[0].replaceAll("[(){}<>\\[\\]]", "")));
+				Integer sales = Integer.parseInt(mainArray0[2].replaceAll("[(){}<>\\[\\]]", ""));
 
-				Vehicle vehicle = new Vehicle(yearMonth, sales);
+				Vehicle vehicle0 = new Vehicle(yearMonth, sales);
 
-				firstArray.add(vehicle);
+				firstArray.add(vehicle0);
 
 			}
 
@@ -84,11 +85,10 @@ public class VehicleService {
 				String secondaryArray = Arrays.toString(mainArray1);
 				mainArray1 = secondaryArray.split(",");
 
-				YearMonth yearMonth = YearMonth.of(Integer.parseInt(mainArray1[1].strip()),
-						findMonth(mainArray1[0].replaceAll("[(){}<>\\[\\]]", "")));
-				Integer sales = Integer.parseInt(mainArray1[2].replaceAll("[(){}<>\\[\\]]", ""));
-
-				Vehicle vehicle1 = new Vehicle(yearMonth, sales);
+				vehicle.setSales(Integer.parseInt(mainArray0[2].replaceAll("[(){}<>\\[\\]]", "")));
+				vehicle.setYearMonth(YearMonth.of(Integer.parseInt(mainArray1[1].strip()),
+						findMonth(mainArray1[0].replaceAll("[(){}<>\\[\\]]", ""))));
+				Vehicle vehicle1 = new Vehicle(vehicle.getYearMonth(), vehicle.getSales());
 
 				secondArray.add(vehicle1);
 			}
@@ -134,8 +134,8 @@ public class VehicleService {
 
 	public void streamSales(String fileName, String fileName2, String fileName3) {
 		Map<YearMonth, Integer> year2016 = firstArray.stream()
-				.filter(vehicle -> vehicle.getYearMonth().getYear() == (0016))
-				.collect(Collectors.toMap(vehicle -> vehicle.getYearMonth(), vehicle -> vehicle.getSales()));
+				.filter(vehicle0 -> vehicle0.getYearMonth().getYear() == (0016))
+				.collect(Collectors.toMap(vehicle0 -> vehicle0.getYearMonth(), vehicle0 -> vehicle0.getSales()));
 
 		Map<YearMonth, Integer> secondYear2016 = secondArray.stream()
 				.filter(vehicle1 -> vehicle1.getYearMonth().getYear() == (16))
@@ -202,29 +202,18 @@ public class VehicleService {
 		YearMonth loserTimeb = loser2.getYearMonth();
 		DateTimeFormatter pattern = DateTimeFormatter.ofPattern("20yy-MM");
 		Vehicle winner = firstArray.get(firstArray.size() - 1);
-		Vehicle winner1 = secondArray.get(firstArray.size() - 1);
-		Vehicle winner2 = thirdArray.get(firstArray.size() - 1);
+		Vehicle winner1 = secondArray.get(secondArray.size() - 1);
+		Vehicle winner2 = thirdArray.get(thirdArray.size() - 1);
 		YearMonth winnerTime = winner.getYearMonth();
 		YearMonth winnerTimea = winner1.getYearMonth();
 		YearMonth winnerTimeb = winner2.getYearMonth();
 
-		String[] letters = { "X", "S", "3" };
-		ArrayList<String> fileNames = new ArrayList<>();
-		fileNames.add(fileName);
-		fileNames.add(fileName2);
-		fileNames.add(fileName3);
-		String variable = null;
-		for (String name : fileNames) {
-			for (int i = 0; i < fileNames.size(); i++) {
-				if (name.contains(letters[i])) {
-					variable = letters[i];
-				} else {
-					variable = "unknown";
-				}
-			}
-		}
+		String newName=fileName.toString().toUpperCase().substring(4, 10);
+		String newName1=fileName2.toString().toUpperCase().substring(4, 10);
+		String newName2=fileName3.toString().toUpperCase().substring(4, 10);
+		
 
-		System.out.println("MODEL " + variable + " YEARLY SALES REPORT ");
+		System.out.println( newName + " YEARLY SALES REPORT ");
 		System.out.println("---------------");
 		if (total == 0) {
 			System.out.println("");
@@ -238,10 +227,10 @@ public class VehicleService {
 		System.out.println("2019->" + total4);
 		String bestYearMonth = winnerTime.format(pattern);
 		String worstYearMonth = loserTime.format(pattern);
-		System.out.println("The best month for the Model " + variable + " was: " + bestYearMonth);
-		System.out.println("The worst month for the Model " + variable + " was: " + worstYearMonth);
+		System.out.println("The best month for the Model " + fileName + " was: " + bestYearMonth);
+		System.out.println("The worst month for the Model " + fileName + " was: " + worstYearMonth);
 
-		System.out.println("MODEL " + variable + " YEARLY SALES REPORT ");
+		System.out.println(newName1 + " YEARLY SALES REPORT ");
 		System.out.println("---------------");
 		if (totalB == 0) {
 			System.out.println("");
@@ -255,10 +244,10 @@ public class VehicleService {
 		System.out.println("2019->" + total4B);
 		String bestYearMontha = winnerTimea.format(pattern);
 		String worstYearMontha = loserTimea.format(pattern);
-		System.out.println("The best month for the Model" + variable + " was: " + bestYearMontha);
-		System.out.println("The worst month for the Model " + variable + " was: " + worstYearMontha);
+		System.out.println("The best month for the Model" + fileName2 + " was: " + bestYearMontha);
+		System.out.println("The worst month for the Model " + fileName2 + " was: " + worstYearMontha);
 
-		System.out.println("MODEL " + variable + " YEARLY SALES REPORT ");
+		System.out.println(newName2 + " YEARLY SALES REPORT ");
 		System.out.println("---------------");
 		if (totalC == 0) {
 			System.out.println("");
@@ -272,7 +261,7 @@ public class VehicleService {
 		System.out.println("2019->" + total4C);
 		String bestYearMonthb = winnerTimeb.format(pattern);
 		String worstYearMonthb = loserTimeb.format(pattern);
-		System.out.println("The best month for the Model " + variable + " was: " + bestYearMonthb);
-		System.out.println("The worst month for the Model " + variable + " was: " + worstYearMonthb);
+		System.out.println("The best month for the Model " + fileName3 + " was: " + bestYearMonthb);
+		System.out.println("The worst month for the Model " + fileName3 + " was: " + worstYearMonthb);
 	}
 }
