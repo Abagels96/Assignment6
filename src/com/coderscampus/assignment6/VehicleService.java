@@ -85,7 +85,7 @@ public class VehicleService {
 				String secondaryArray = Arrays.toString(mainArray1);
 				mainArray1 = secondaryArray.split(",");
 
-				vehicle.setSales(Integer.parseInt(mainArray0[2].replaceAll("[(){}<>\\[\\]]", "")));
+				vehicle.setSales(Integer.parseInt(mainArray1[2].replaceAll("[(){}<>\\[\\]]", "")));
 				vehicle.setYearMonth(YearMonth.of(Integer.parseInt(mainArray1[1].strip()),
 						findMonth(mainArray1[0].replaceAll("[(){}<>\\[\\]]", ""))));
 				Vehicle vehicle1 = new Vehicle(vehicle.getYearMonth(), vehicle.getSales());
@@ -208,12 +208,11 @@ public class VehicleService {
 		YearMonth winnerTimea = winner1.getYearMonth();
 		YearMonth winnerTimeb = winner2.getYearMonth();
 
-		String newName=fileName.toString().toUpperCase().substring(4, 10);
-		String newName1=fileName2.toString().toUpperCase().substring(4, 10);
-		String newName2=fileName3.toString().toUpperCase().substring(4, 10);
-		
+		String newName = fileName.toString().toUpperCase().substring(4, 10);
+		String newName1 = fileName2.toString().toUpperCase().substring(4, 10);
+		String newName2 = fileName3.toString().toUpperCase().substring(4, 10);
 
-		System.out.println( newName + " YEARLY SALES REPORT ");
+		System.out.println(newName + " YEARLY SALES REPORT ");
 		System.out.println("---------------");
 		if (total == 0) {
 			System.out.println("");
